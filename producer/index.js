@@ -44,6 +44,7 @@ const user_data = {
 async function main() {
   await create();
   await send(JSON.stringify(user_data));
+  process.exit();
 }
 
 main();

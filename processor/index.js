@@ -1,24 +1,46 @@
-const rsmq = require("rsmq-worker")
-const worker = new rsmq("commandqueue", {
-  host: "localhost",
-  port: 6379,
-  ns: "producer",
-});
+const RedisSMQ = require("rsmq");
+const rsmq = new RedisSMQ({ host: "127.0.0.1", port: 6379, ns: "rsmq" });
 
-worker.on("message", (msg, next, id) => {
-  let user_data = JSON.parse(msg)
-  console.log(user_data);
-  next()
-});
+async function create() {
+  try {
+    await new Promise((resolve, reject) => 
+      rsmq.createQueue({ qname: "commandqueue" }, (err, resp) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(resp);
+        }
+      })
+    );
+  } catch (err) {
+    if (err.name == 'queueExists') {
+      console.log("Queue Exists");
+    }
+  }
+}
 
-worker.on('error', function (err, msg) {
-  console.log("ERROR", err, msg.id);
-});
-worker.on('exceeded', function (msg) {
-  console.log("EXCEEDED", msg.id);
-});
-worker.on('timeout', function (msg) {
-  console.log("TIMEOUT", msg.id, msg.rc);
-});
+async function receive() {
+  return await new Promise((resolve, reject) => 
+    rsmq.receiveMessage({ qname: "commandqueue" }, (err, resp) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(resp);
+      }
+    })
+  );
+}
 
-worker.start();
+async function main() {
+  while(true) {
+    const message = await receive();
+    if (message.id) {
+      console.log(message);
+    } else {
+      console.log('No message found');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  }
+}
+
+main();

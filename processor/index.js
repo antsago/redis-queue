@@ -21,7 +21,7 @@ async function create() {
 
 async function receive() {
   return await new Promise((resolve, reject) => 
-    rsmq.receiveMessage({ qname: "commandqueue" }, (err, resp) => {
+    rsmq.popMessage({ qname: "commandqueue" }, (err, resp) => {
       if (err) {
         reject(err);
       } else {

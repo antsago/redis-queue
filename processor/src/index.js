@@ -39,6 +39,8 @@ function formatData(records, group, sourceApp) {
 
 async function main() {
   const queue = new Queue('commandqueue');
+  await queue.create();
+
   console.log('Listening for new messages');
 
   while(true) {

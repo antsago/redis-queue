@@ -8,6 +8,26 @@ class QueueClient {
     this.rsmq = new RedisSMQ({ host: HOST, port: 6379, ns: 'rsmq' });
   }
 
+  async create() {
+    try {
+      await new Promise((resolve, reject) => 
+        this.rsmq.createQueue({ qname: this.name }, (err, resp) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(resp);
+          }
+        })
+      );
+    } catch (err) {
+      if (err.name == 'queueExists') {
+        console.log('Queue Exists');
+      } else {
+        throw err;
+      }
+    }
+  }
+
   // I'll assume that the queue is only used for this and that the message 
   // source can be trusted (thus there's no need for validation)
   async receive() {

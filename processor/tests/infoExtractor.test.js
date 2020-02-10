@@ -1,9 +1,22 @@
-const Nmbrs = require('../src/nmbrsClient');
-jest.mock('../src/nmbrsClient');
+const Nmbrs = require("../src/nmbrsClient");
+const Extractor = require("../src/infoExtractor");
 
-const companies = [{ foo: 'bar'}]
-const employees = [{ foo: 'bar'}]
-const daysOff = [{ foo: 'bar'}]
+jest.mock("../src/nmbrsClient");
+
+const companies = [{ id: "54613", number: "444445", name: "DEMO B.V. 2" }];
+const employees = [
+  { id: "503293", startYear: 2017 },
+  { id: "503305", startYear: 2017 }
+];
+const daysOff = [
+  {
+    date: new Date("2018-01-10T23:00:00.000Z"),
+    durationHours: 22.8,
+    description: "",
+    id: "1018970",
+    type: "Type1"
+  }
+];
 
 const mockGetCompanies = jest.fn();
 Nmbrs.prototype.getCompanies = mockGetCompanies;
@@ -19,10 +32,12 @@ mockGetDaysOff.mockReturnValue(Promise.resolve(daysOff));
 
 const client = new Nmbrs();
 
-describe('InfoExtractor', () => {
-  test('Info returns expected information', async () => {
-    expect(await client.getCompanies()).toBe(companies)
-    expect(await client.getEmployees('1')).toBe(employees)
-    expect(await client.getDaysOff('1', '2020')).toBe(daysOff)
+describe("InfoExtractor", () => {
+  test("Info returns expected information", async () => {
+    const extractor = new Extractor(client);
+
+    const data = await extractor.extractInfo();
+
+    expect(data).toMatchSnapshot();
   });
-})
+});

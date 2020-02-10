@@ -28,7 +28,7 @@ class Nmbrs {
 
   async getCompanies() {
     const payload = '<List_GetAll xmlns="https://api.nmbrs.nl/soap/v2.1/CompanyService" />';
-    const response = await this.makeCall(this.COMPANY_SERVICE, payload);
+    const response = await this.makeCall(COMPANY_SERVICE, payload);
   
     const companies = response['List_GetAllResponse'][0]['List_GetAllResult'][0]['Company'];
 
@@ -37,7 +37,7 @@ class Nmbrs {
 
   async getEmployees(companyId) {
     const payload = `<Function_GetAll_AllEmployeesByCompany_V2 xmlns="https://api.nmbrs.nl/soap/v2.1/EmployeeService"><CompanyID>${companyId}</CompanyID></Function_GetAll_AllEmployeesByCompany_V2>`;
-    const response = await this.makeCall(this.EMPLOYEE_SERVICE, payload);
+    const response = await this.makeCall(EMPLOYEE_SERVICE, payload);
 
     const employees = response['Function_GetAll_AllEmployeesByCompany_V2Response'][0]['Function_GetAll_AllEmployeesByCompany_V2Result'][0]['EmployeeFunctionItem_V2'];
 
@@ -51,7 +51,7 @@ class Nmbrs {
 
   async getDaysOff(employeeId, year) {
     const payload = `<Leave_GetList_V2 xmlns="https://api.nmbrs.nl/soap/v2.1/EmployeeService"><EmployeeId>${employeeId}</EmployeeId><Year>${year}</Year></Leave_GetList_V2>`;
-    const response = await this.makeCall(this.EMPLOYEE_SERVICE, payload);
+    const response = await this.makeCall(EMPLOYEE_SERVICE, payload);
 
     const leaves = response['Leave_GetList_V2Response'][0]['Leave_GetList_V2Result'][0]['LeaveV2'];
     return leaves ?

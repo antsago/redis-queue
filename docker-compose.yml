@@ -5,3 +5,10 @@ services:
     image: redis
     ports:
       - 6379:6379
+  processor:
+    container_name: processor
+    build: ./processor
+    links:
+      - redis
+    depends_on:
+      - redis

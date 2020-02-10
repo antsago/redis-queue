@@ -1,7 +1,7 @@
 const Queue = require("./queueClient");
 const Nmbrs = require('./nmbrsClient');
 
-async function processMessage(message) {
+async function extractInfo(message) {
   const client = new Nmbrs(message.user, message.pass)
   const companies = await client.getCompanies();
   console.log(companies)
@@ -18,9 +18,14 @@ async function main() {
   while(true) {
     const message = await queue.receive();
     if (message.id) {
-      console.log(message);
+      console.log(`Processing message ${message.id}`);
+
       const payload = JSON.parse(message.message)
-      await processMessage(payload);
+      const info = await extractInfo(payload);
+      await queue.delete(message.id);
+
+      console.log(`Finished processing ${message.id}`);
+      
     } else {
       await new Promise(resolve => setTimeout(resolve, 1000));
     }

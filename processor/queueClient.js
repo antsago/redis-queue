@@ -10,7 +10,19 @@ class QueueClient {
   // source can be trusted (thus there's no need for validation)
   async receive() {
     return await new Promise((resolve, reject) => 
-      this.rsmq.popMessage({ qname: this.name }, (err, resp) => {
+      this.rsmq.receiveMessage({ qname: this.name }, (err, resp) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(resp);
+        }
+      })
+    );
+  }
+
+  async delete(messageId) {
+    return await new Promise((resolve, reject) => 
+      this.rsmq.deleteMessage({ qname: this.name, id: messageId }, (err, resp) => {
         if (err) {
           reject(err);
         } else {

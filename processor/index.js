@@ -23,6 +23,8 @@ async function processMessage(message) {
   console.log(companies)
   const employees = await client.getEmployees(companies[0].id);
   console.log(employees)
+  const daysOff = await client.getDaysOff(employees[0].id, 2016)
+  console.log(daysOff)
 }
 
 async function main() {

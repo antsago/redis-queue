@@ -42,12 +42,25 @@ class Nmbrs {
     const employees = response['Function_GetAll_AllEmployeesByCompany_V2Response'][0]['Function_GetAll_AllEmployeesByCompany_V2Result'][0]['EmployeeFunctionItem_V2'];
 
     return employees.map(employee => {
-      const functions = employee['EmployeeFunctions'][0]['EmployeeFunction'];
       return {
         id: employee['EmployeeId'][0],
-        startYear: functions[0]['StartYear'][0],
+        startYear: employee['EmployeeFunctions'][0]['EmployeeFunction'][0]['StartYear'][0],
       }
     });
+  }
+
+  async getDaysOff(employeeId, year) {
+    const payload = `<Leave_GetList_V2 xmlns="https://api.nmbrs.nl/soap/v2.1/EmployeeService"><EmployeeId>${employeeId}</EmployeeId><Year>${year}</Year></Leave_GetList_V2>`;
+    const response = await this.makeCall(this.EMPLOYEE_SERVICE, payload);
+
+    const leaves = response['Leave_GetList_V2Response'][0]['Leave_GetList_V2Result'][0]['LeaveV2'];
+    return leaves.map(leave => ({
+      date: new Date(leave['Start'][0]),
+      durationHours: parseFloat(leave['Hours'][0]),
+      description: leave['Description'] ? leave['Description'][0] : '',
+      id: leave['Id'][0],
+      type: leave['Type'][0],
+    }));
   }
 }
 

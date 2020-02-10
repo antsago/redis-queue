@@ -21,6 +21,8 @@ async function processMessage(message) {
   const client = new Nmbrs(message.user, message.pass)
   const companies = await client.getCompanies();
   console.log(companies)
+  const employees = await client.getEmployees(companies[0].id);
+  console.log(employees)
 }
 
 async function main() {

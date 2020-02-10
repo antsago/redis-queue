@@ -1,15 +1,6 @@
-const Queue = require("./queueClient");
+const Queue = require('./queueClient');
 const Nmbrs = require('./nmbrsClient');
-
-async function extractInfo(message) {
-  const client = new Nmbrs(message.user, message.pass)
-  const companies = await client.getCompanies();
-  console.log(companies)
-  const employees = await client.getEmployees(companies[0].id);
-  console.log(employees)
-  const daysOff = await client.getDaysOff(employees[0].id, 2016)
-  console.log(daysOff)
-}
+const Extactor = require('./infoExtractor');
 
 async function main() {
   const queue = new Queue('commandqueue');
@@ -21,7 +12,10 @@ async function main() {
       console.log(`Processing message ${message.id}`);
 
       const payload = JSON.parse(message.message)
-      const info = await extractInfo(payload);
+      const client = new Nmbrs(payload.user, payload.pass)
+      const extractor = new Extactor(client)
+
+      const info = await extractor.extractInfo();
       await queue.delete(message.id);
 
       console.log(`Finished processing ${message.id}`);

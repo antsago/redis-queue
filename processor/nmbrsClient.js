@@ -44,7 +44,7 @@ class Nmbrs {
     return employees.map(employee => {
       return {
         id: employee['EmployeeId'][0],
-        startYear: employee['EmployeeFunctions'][0]['EmployeeFunction'][0]['StartYear'][0],
+        startYear: parseInt(employee['EmployeeFunctions'][0]['EmployeeFunction'][0]['StartYear'][0], 10),
       }
     });
   }
@@ -54,13 +54,15 @@ class Nmbrs {
     const response = await this.makeCall(this.EMPLOYEE_SERVICE, payload);
 
     const leaves = response['Leave_GetList_V2Response'][0]['Leave_GetList_V2Result'][0]['LeaveV2'];
-    return leaves.map(leave => ({
-      date: new Date(leave['Start'][0]),
-      durationHours: parseFloat(leave['Hours'][0]),
-      description: leave['Description'] ? leave['Description'][0] : '',
-      id: leave['Id'][0],
-      type: leave['Type'][0],
-    }));
+    return leaves ?
+      leaves.map(leave => ({
+        date: new Date(leave['Start'][0]),
+        durationHours: parseFloat(leave['Hours'][0]),
+        description: leave['Description'] ? leave['Description'][0] : '',
+        id: leave['Id'][0],
+        type: leave['Type'][0],
+      }))
+      : [];
   }
 }
 

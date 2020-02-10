@@ -12,19 +12,25 @@ class InfoExtractor {
   async getAllDaysOff(employee) {
     const thisYear = (new Date()).getFullYear();
 
-    return Promise.all(this
+    const employees = await Promise.all(this
       .range(employee.startYear, thisYear)
-      .map(async year => await this.client.getDaysOff(employee.id, year)),
+      .map(year => this.client.getDaysOff(employee.id, year)),
     );
+
+    return employees.flat()
   }
 
   async extractInfo() {
     const companies = await this.client.getCompanies();
-    console.log(companies)
-    const employees = await this.client.getEmployees(companies[0].id);
-    console.log(employees)
-    const daysOff = await this.getAllDaysOff(employees[0])
-    console.log(daysOff)
+
+    const employees = await Promise.all(companies.map(company => this.client.getEmployees(company.id)));
+
+    const daysOff = await Promise.all(employees.flat().map(async employee => ({
+      daysOff: await this.getAllDaysOff(employee),
+      employeeId: employee.id,
+    })))
+
+    return daysOff
   }
 }
 

@@ -35,8 +35,8 @@ async function send(data) {
 
 const user_data = {
   source_app: 'nmbrs',
-  user: '$username',
-  pass: '$apikey',
+  user: 'michiel.crommelinck@officient.io',
+  pass: '2ed523df992646bf9bcfef66f75ef758',
   group: 1234,
   controller: 'importDaysoff',
 };

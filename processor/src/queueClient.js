@@ -5,7 +5,7 @@ const HOST = process.env.NODE_ENV ? '127.0.0.1' : 'redis';
 class QueueClient {
   constructor(queueName) {
     this.name = queueName;
-    this.rsmq = new RedisSMQ({ HOST, port: 6379, ns: 'rsmq' });
+    this.rsmq = new RedisSMQ({ host: HOST, port: 6379, ns: 'rsmq' });
   }
 
   // I'll assume that the queue is only used for this and that the message 

@@ -1,14 +1,14 @@
 const xml2js = require('xml2js');
 const axios = require("axios").default;
 
+COMPANY_SERVICE = 'https://api.nmbrs.nl/soap/v2.1/CompanyService';
+EMPLOYEE_SERVICE = 'https://api.nmbrs.nl/soap/v2.1/EmployeeService';
+
 class Nmbrs {
   constructor(username, password) {
     this.username = username;
     this.password = password;
   }
-
-  COMPANY_SERVICE = 'https://api.nmbrs.nl/soap/v2.1/CompanyService';
-  EMPLOYEE_SERVICE = 'https://api.nmbrs.nl/soap/v2.1/EmployeeService';
 
   async makeCall(service, data) {
     try {

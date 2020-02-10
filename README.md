@@ -13,4 +13,6 @@ The repositories have been developed with Node v12.14.1. Producer will likely ru
 anything ES8+, but it has not been tested. Processor needs, at least,
 ES10, but no other versions have been tested either. Try 'nvm' if you normally use a different version.
 
-For development try "docker-compose up redis" and "npm run dev" of the processor. 
+For development try "docker-compose up redis" and "npm run dev" in processor.
+
+Tests are only present in processor (producer is quite simple), to run them use "npm test"

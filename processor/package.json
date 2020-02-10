@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./src/index.js",
     "dev": "NODE_ENV=dev nodemon --inspect --ignore ./tests ./src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "updateSnapshots": "jest --updateSnapshot"
   },
   "keywords": [],
   "author": "",

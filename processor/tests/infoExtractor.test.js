@@ -5,8 +5,8 @@ jest.mock("../src/nmbrsClient");
 
 const companies = [{ id: "54613", number: "444445", name: "DEMO B.V. 2" }];
 const employees = [
-  { id: "503293", startYear: 2017 },
-  { id: "503305", startYear: 2017 }
+  { id: "503293", startYear: new Date().getFullYear() },
+  { id: "503305", startYear: new Date().getFullYear() }
 ];
 const daysOff = [
   {
@@ -39,5 +39,17 @@ describe("InfoExtractor", () => {
     const data = await extractor.extractInfo();
 
     expect(data).toMatchSnapshot();
+  });
+
+  test('GetCompanies is called once', () => {
+    expect(mockGetCompanies.mock.calls.length).toBe(1)
+  });
+
+  test('GetEmployees is called once per company', () => {
+    expect(mockGetEmployess.mock.calls.length).toBe(companies.length)
+  });
+
+  test('GetDaysOff is called once per employee', () => {
+    expect(mockGetDaysOff.mock.calls.length).toBe(employees.length)
   });
 });

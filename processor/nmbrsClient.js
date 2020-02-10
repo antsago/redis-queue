@@ -41,7 +41,13 @@ class Nmbrs {
 
     const employees = response['Function_GetAll_AllEmployeesByCompany_V2Response'][0]['Function_GetAll_AllEmployeesByCompany_V2Result'][0]['EmployeeFunctionItem_V2'];
 
-    return employees.map(employee => employee['EmployeeId'][0]);
+    return employees.map(employee => {
+      const functions = employee['EmployeeFunctions'][0]['EmployeeFunction'];
+      return {
+        id: employee['EmployeeId'][0],
+        startYear: functions[0]['StartYear'][0],
+      }
+    });
   }
 }
 

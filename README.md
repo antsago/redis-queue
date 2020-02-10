@@ -7,7 +7,8 @@ It consist of three different services:
   - Processor: to receive and process the messages
 
 To start it run "docker-compose up" and then "npm start" the producer service to
-add messages as necessary.
+add messages as necessary. The files produced by the processor are located
+in /processor/records
 
 The repositories have been developed with Node v12.14.1. Producer will likely run with
 anything ES8+, but it has not been tested. Processor needs, at least,
